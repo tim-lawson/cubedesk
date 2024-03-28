@@ -70,7 +70,7 @@ with open("data/cubedesk_data_24_03_2024_08_59_00.txt", encoding="utf-8") as dat
         )
         text.set_bbox(dict(facecolor="white", edgecolor="white", alpha=1))
 
-        plt.savefig(f"{column}.png")
+        plt.savefig(f"figures/{column}.png")
         plt.clf()
 
     for aos in [[100, 1000]]:
@@ -95,5 +95,5 @@ with open("data/cubedesk_data_24_03_2024_08_59_00.txt", encoding="utf-8") as dat
         plt.ylabel("Time (s)")
         plt.legend()
 
-        plt.savefig(f"ao_{'-'.join([str(ao) for ao in aos])}.png")
+        plt.savefig(f"figures/ao_{'-'.join([str(ao) for ao in aos])}.png")
         plt.clf()
