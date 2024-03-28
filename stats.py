@@ -23,10 +23,24 @@ with open("data/cubedesk_data_28_03_2024_19_41_42.txt", encoding="utf-8") as dat
     # Create a PB column.
     df["pbtime"] = df["time"].cummin()
 
-    # Create AO and standard deviation columns.
+    def _remove_outliers(x: pd.Series):
+        if len(x) < 3:
+            return x
+        if len(x) == 5:
+            row = 1
+        else:
+            row = int(len(x) * (5 / 100))
+        if row == 0:
+            return x
+        return x.sort_values().iloc[row:-row].copy()
+
+    def _mean(x: pd.Series):
+        return _remove_outliers(x).mean()
+
+    # Create AO columns.
     for ao in [3, 5, 12, 50, 100, 1000]:
-        df[f"ao{ao}"] = df["time"].rolling(window=ao).mean()
-        df[f"std{ao}"] = df["time"].rolling(window=ao).std()
+        # Remove 5% of the best and worst times before computing the mean.
+        df[f"ao{ao}"] = df["time"].rolling(window=ao).apply(_mean)
         df[f"pb{ao}"] = df[f"ao{ao}"].cummin()
 
     MU = r"$\mu$"
@@ -93,14 +107,8 @@ with open("data/cubedesk_data_28_03_2024_19_41_42.txt", encoding="utf-8") as dat
 
     # For each AO column, plot the AO, standard deviation, and PB.
     for ao in [3, 5, 12, 50, 100, 1000]:
-        plt.plot(df.index, df[f"ao{ao}"], label=f"ao{ao}", color="tab:blue")
-
-        plt.fill_between(
-            df.index,
-            df[f"ao{ao}"] - 1.96 * df[f"std{ao}"],
-            df[f"ao{ao}"] + 1.96 * df[f"std{ao}"],
-            color="tab:blue",
-            alpha=0.25,
+        plt.scatter(
+            df.index, df[f"ao{ao}"], label=f"ao{ao}", color="tab:blue", alpha=0.5, s=1
         )
 
         plt.plot(df.index, df[f"pb{ao}"], label=f"pb{ao}", color="tab:orange")
