@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Change the file path to the location of your data export.
-with open("data/cubedesk_data_28_03_2024_19_41_42.txt", encoding="utf-8") as data:
+with open("data/cubedesk_data_01_04_2024_11_10_06.txt", encoding="utf-8") as data:
     df = pd.DataFrame.from_dict(json.load(data)["solves"])
 
     # Filter to a cube type.
