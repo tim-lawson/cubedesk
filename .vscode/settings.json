@@ -1,0 +1,18 @@
+{
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "black-formatter.args": ["--line-length", "88"],
+  "files.exclude": {
+    "**/.pytest_cache": true,
+    "**/__pycache__": true
+  },
+  "isort.args": ["--profile", "black"],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.defaultInterpreterPath": "${env:HOME}/miniconda3/envs/sharpness",
+  "python.terminal.activateEnvironment": true
+}
