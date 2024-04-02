@@ -1,7 +1,7 @@
 """Load the most recent data export and filter to a cube type."""
 
-import datetime as dt
 import json
+from datetime import datetime
 from glob import glob
 
 import pandas as pd
@@ -11,9 +11,18 @@ def load(cube_type="333"):
     """Load the most recent data export and filter to a cube type."""
 
     # Find the most recent data export in the data directory.
-    files = sorted(glob("data/cubedesk_data_*.txt"))
+    files = glob("data/cubedesk_data_*.txt")
 
-    with open(files[-1], encoding="utf-8") as data:
+    # The filenames have the format `cubedesk_data_DD_MM_YYYY_HH_MM_SS.txt`.
+    def key(file: str):
+        return datetime.strptime(
+            file.replace("data/cubedesk_data_", "").replace(".txt", ""),
+            "%d_%m_%Y_%H_%M_%S",
+        )
+
+    files = sorted(files, key=key, reverse=True)
+
+    with open(files[0], encoding="utf-8") as data:
         df = pd.DataFrame.from_dict(json.load(data)["solves"])
 
         # Filter to a cube type.
@@ -22,8 +31,6 @@ def load(cube_type="333"):
         df = df[["started_at", "time"]]
 
         df = df.sort_values(by="started_at")
-        df["started_at"] = (df["started_at"] / 1000).apply(dt.datetime.fromtimestamp)
-        df = df.set_index("started_at")
 
         return df
 
