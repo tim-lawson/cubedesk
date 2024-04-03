@@ -26,7 +26,7 @@ def update(frame):
     """
     plt.cla()
 
-    n = frame * BATCH_SIZE
+    n = (frame + 1) * BATCH_SIZE
     imin, imax = max(n - 1000, 0), n + 1
     times = df["time"].iloc[imin:imax]
     (mu, sigma) = norm.fit(times)
@@ -47,20 +47,19 @@ def update(frame):
     plt.plot(bins, y, "tab:orange", linewidth=2)
 
     ax.set_xlim(10, 50)
-    ax.set_ylim(0, 0.2)
+    ax.set_ylim(0, 0.16)
+
     plt.title(
-        r"$\mathrm{Histogram\ of\ times:}\ \mu=%.3f,\ \sigma=%.3f,\ n=%d$"
-        % (mu, sigma, n)
+        r"$\mathrm{Last\ 1000\ times:}\ \mu=%.3f,\ \sigma=%.3f,\ n=%d$" % (mu, sigma, n)
     )
+    plt.xlabel("Time (s)")
+    plt.ylabel("Density")
 
 
 ani = FuncAnimation(
     fig,
     update,  # type: ignore
     frames=ceil(len(df) / BATCH_SIZE),
-    interval=500,
 )
 
-plt.xlabel("Time (s)")
-plt.ylabel("Density")
-plt.show()
+ani.save("figures/animation.gif", writer="imagemagick", fps=5)
