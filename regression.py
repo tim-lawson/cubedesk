@@ -27,9 +27,34 @@ model.fit(X, y)
 X_ = np.linspace(xmin, xmin + 2 * xrange, 1000).reshape(-1, 1)
 y_ = model.predict(X_)
 
+# Transform X and X_ into timestamps.
+X = pd.to_datetime(X.flatten(), unit="ms")
+X_ = pd.to_datetime(X_.flatten(), unit="ms")
+
 plt.scatter(X, y, color="tab:blue", label="data", alpha=0.5, s=1)
-plt.plot(X_, y_, color="tab:orange", label="mean")
-plt.xlabel("Timestamp")
+
+plt.plot(X_, y_, color="tab:orange", label="linear regression")
+
+# Find the first time the forecast is below 20s.
+idx = np.argmax(y_ < 20)
+
+# Add a vertical line at that time.
+plt.axvline(x=X_[idx], color="k", linestyle="--")
+
+# Annotate the line.
+plt.text(
+    X_[idx] + pd.Timedelta(days=1),
+    20 + 1,
+    "Forecast < 20s",
+    verticalalignment="bottom",
+    horizontalalignment="left",
+)
+
+plt.xlabel("Date")
+plt.xticks(rotation=45)
 plt.ylabel("Time (s)")
+
 plt.legend()
+plt.tight_layout()
+
 plt.savefig("figures/regression.png")
