@@ -116,7 +116,7 @@ plt.legend()
 plt.savefig("figures/time.png")
 plt.clf()
 
-# For each AO column, plot the AO, standard deviation, and PB.
+# For each AO column, plot the AO and PB.
 for ao in [3, 5, 12, 50, 100, 1000]:
     plt.scatter(
         df.index, df[f"ao{ao}"], label=f"ao{ao}", color="tab:blue", alpha=0.5, s=1
@@ -145,3 +145,29 @@ for ao in [3, 5, 12, 50, 100, 1000]:
 
     plt.savefig(f"figures/time_{ao}.png")
     plt.clf()
+
+
+# Plot the time column, the AO1000, and the standard deviation of the AO1000.
+plt.scatter(df.index, df["time"], label="time", color="tab:blue", alpha=0.25, s=1)
+plt.plot(df.index, df["ao1000"], label="ao1000", color="tab:orange")
+
+std = df["time"].rolling(window=1000).std()
+
+plt.fill_between(
+    df.index,
+    df["ao1000"] - 1.96 * std,
+    df["ao1000"] + 1.96 * std,
+    color="tab:orange",
+    alpha=0.25,
+    label="95% interval",
+)
+
+plt.xlim(df.index[1000 - 1], df.index[-1])
+plt.ylim(10, 50)
+
+plt.gcf().autofmt_xdate()
+plt.ylabel("Time (s)")
+plt.legend()
+
+plt.savefig("figures/interval.png")
+plt.clf()
