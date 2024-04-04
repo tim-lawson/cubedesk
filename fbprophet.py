@@ -35,13 +35,14 @@ plt.axvline(x=forecast["ds"][idx], color="k", linestyle="--")
 plt.text(
     forecast["ds"][idx] + pd.Timedelta(days=1),
     20 + 1,
-    "Forecast < 20s",
+    f"Forecast < 20s\n{forecast['ds'][idx].strftime('%Y-%m-%d')}",
     verticalalignment="bottom",
     horizontalalignment="left",
 )
 
 plt.xlabel("Date")
 plt.ylabel("Time (s)")
+plt.ylim(10, 50)
 
 plt.legend()
 plt.tight_layout()

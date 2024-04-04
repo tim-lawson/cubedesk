@@ -45,7 +45,7 @@ plt.axvline(x=X_[idx], color="k", linestyle="--")
 plt.text(
     X_[idx] + pd.Timedelta(days=1),
     20 + 1,
-    "Forecast < 20s",
+    f"Forecast < 20s\n{X_[idx].strftime('%Y-%m-%d')}",
     verticalalignment="bottom",
     horizontalalignment="left",
 )
