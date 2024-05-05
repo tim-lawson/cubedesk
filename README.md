@@ -1,14 +1,8 @@
-This is a simple Python script that generates plots from a [CubeDesk](https://www.cubedesk.io/) data export.
+Simple Python scripts that generate plots from [CubeDesk](https://www.cubedesk.io/) data exports.
 To install dependencies with Conda:
 
 ```sh
 conda create -n cube python=3.11
 conda activate cube
 pip install -r requirements.txt
-```
-
-To run the script:
-
-```sh
-python cube.py
 ```
